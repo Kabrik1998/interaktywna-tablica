@@ -1,97 +1,149 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Klasa 4 – działy</title>
+
   <style>
     :root{
-      --bg:#f6f0e8; --panel:#fffaf2; --ink:#1f2937; --muted:#6b7280;
-      --border: rgba(31,41,55,.12); --shadow: 0 12px 40px rgba(31,41,55,.12);
-      --accent:#3b82f6; --radius:18px;
+      --bg:#f6f0e8;
+      --panel:#fffaf2;
+      --ink:#1f2937;
+      --muted:#6b7280;
+      --border: rgba(31,41,55,.12);
+      --shadow: 0 14px 40px rgba(31,41,55,.14);
+      --accent:#3b82f6;
+      --radius:22px;
     }
-    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Trebuchet MS", sans-serif; }
-    body{ margin:0; color:var(--ink); background: radial-gradient(1200px 600px at 20% 0%, #fff 0%, var(--bg) 55%) fixed; }
+
+    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+    body{
+      margin:0;
+      color:var(--ink);
+      background: radial-gradient(1200px 600px at 20% 0%, #fff 0%, var(--bg) 55%) fixed;
+    }
     a{ color:inherit; text-decoration:none; }
-    .wrap{ max-width: 1100px; margin: 0 auto; padding: 18px 16px 40px; }
+
+    .wrap{ max-width: 1120px; margin: 0 auto; padding: 22px 16px 48px; }
+
     header{
-      display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding:14px; background: rgba(255,250,242,.78);
-      border:1px solid var(--border); border-radius: var(--radius);
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:14px;
+      padding:18px 20px;
+      background: rgba(255,250,242,.9);
+      border:1px solid var(--border);
+      border-radius: 26px;
       box-shadow: var(--shadow);
+      flex-wrap:wrap;
     }
+
+    .header-left strong{
+      font-size:1.25rem;
+      font-weight:900;
+    }
+    .header-left span{
+      display:block;
+      color:var(--muted);
+      font-weight:700;
+      margin-top:2px;
+    }
+
+    .actions{ display:flex; gap:10px; flex-wrap:wrap; }
+
     .btn{
-      border: 1px solid var(--border);
-      background: var(--panel);
-      padding: 10px 12px;
-      border-radius: 999px;
+      padding:10px 16px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-weight:800;
       cursor:pointer;
-      box-shadow: 0 10px 22px rgba(31,41,55,.10);
-      font-weight: 650;
-      font-size: .95rem;
+      transition:.2s ease;
     }
+    .btn:hover{ box-shadow:0 8px 18px rgba(31,41,55,.12); }
+
     .btn.primary{
       background: linear-gradient(135deg, var(--accent), #60a5fa);
-      color:#fff; border-color: rgba(59,130,246,.35);
+      color:#fff;
+      border:none;
     }
+
     .card{
-      margin-top:16px;
-      background: rgba(255,250,242,.86);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      margin-top:26px;
+      background: rgba(255,250,242,.92);
+      border:1px solid var(--border);
+      border-radius: 26px;
       box-shadow: var(--shadow);
-      padding: 18px;
+      padding:26px;
     }
-    h1{ margin:0 0 6px; font-size: clamp(1.3rem, 2.1vw, 1.7rem); }
-    p{ margin:0; color:var(--muted); }
+
+    h1{
+      margin:0 0 6px;
+      font-size: clamp(1.6rem, 2.2vw, 2.1rem);
+      font-weight:950;
+    }
+    p{
+      margin:0 0 20px;
+      color:var(--muted);
+      font-size:1.05rem;
+      font-weight:650;
+    }
 
     .tiles{
-      margin-top: 14px;
       display:grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: 14px;
+      grid-template-columns: repeat(4, 1fr);
+      gap:18px;
     }
     @media (max-width: 980px){ .tiles{ grid-template-columns: repeat(2, 1fr); } }
     @media (max-width: 520px){ .tiles{ grid-template-columns: 1fr; } }
+
     .tile{
-      background: rgba(255,250,242,.92);
-      border: 1px solid var(--border);
-      border-radius: 18px;
-      padding: 16px 16px;
-      box-shadow: 0 12px 26px rgba(31,41,55,.10);
-      display:flex; flex-direction:column; gap:8px;
-      min-height: 110px;
-      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-      position:relative; overflow:hidden;
+      min-height:120px;
+      border-radius: 22px;
+      border:1px solid var(--border);
+      background:
+        linear-gradient(135deg, rgba(59,130,246,.06), rgba(124,58,237,.04)),
+        #fffaf2;
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      font-size:1.2rem;
+      font-weight:900;
+      text-align:center;
+      box-shadow: 0 14px 30px rgba(31,41,55,.12);
+      transition:
+        transform .25s cubic-bezier(.22,.61,.36,1),
+        box-shadow .25s ease,
+        border-color .25s ease;
     }
-    .tile::after{
-      content:""; position:absolute; inset:-2px;
-      background: radial-gradient(240px 140px at 10% 0%, rgba(59,130,246,.18), transparent 60%);
-      opacity:.95; pointer-events:none;
+
+    .tile:hover{
+      transform: translateY(-6px);
+      box-shadow: 0 30px 60px rgba(31,41,55,.18);
+      border-color: rgba(59,130,246,.35);
     }
-    .tile:hover{ transform: translateY(-2px); box-shadow: 0 18px 44px rgba(31,41,55,.14); border-color: rgba(59,130,246,.25); }
-    .t{ font-weight: 850; position:relative; z-index:1; }
-    .d{ color: var(--muted); font-size:.92rem; margin-top:auto; position:relative; z-index:1; }
-    .tag{
-      width:fit-content; padding:4px 10px; border-radius:999px;
-      background: rgba(59,130,246,.10);
-      border: 1px solid rgba(59,130,246,.18);
-      color: rgba(29,78,216,.95);
-      font-size:.78rem; font-weight:800;
-      position:relative; z-index:1;
+
+    footer{
+      margin-top:26px;
+      text-align:center;
+      color: rgba(31,41,55,.65);
+      font-size:.95rem;
+      font-weight:650;
     }
-    footer{ margin-top:18px; color: rgba(31,41,55,.70); font-size:.9rem; text-align:center; }
   </style>
 </head>
+
 <body>
   <div class="wrap">
     <header>
-      <div>
-        <strong>Klasa 4</strong><br/>
-        <span style="color:rgba(31,41,55,.70); font-size:.9rem;">Wybierz dział</span>
+      <div class="header-left">
+        <strong>Klasa 4</strong>
+        <span>Wybierz dział</span>
       </div>
-      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+
+      <div class="actions">
         <a class="btn" href="index.html">Strona główna</a>
         <a class="btn primary" href="dzialania-pisemne.html">Działania pisemne</a>
       </div>
@@ -99,57 +151,21 @@
 
     <section class="card">
       <h1>Działy – Klasa 4</h1>
-      <p>Kliknij dział, żeby przejść do kart pracy (na razie aktywne: Działania pisemne).</p>
+      <p>Kliknij dział, aby przejść dalej.</p>
 
       <div class="tiles">
-        <div class="tile">
-          <div class="tag">Wkrótce</div>
-          <div class="t">Liczby i działania</div>
-          <div class="d">W przygotowaniu</div>
-        </div>
+        <div class="tile">Liczby i działania</div>
+        <div class="tile">Systemy zapisywania liczb</div>
 
-        <div class="tile">
-          <div class="tag">Wkrótce</div>
-          <div class="t">Systemy zapisywania liczb</div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <!-- AKTYWNE -->
         <a class="tile" href="dzialania-pisemne.html">
-          <div class="tag">Aktywne</div>
-          <div class="t">Działania pisemne</div>
-          <div class="d">Dodawanie, odejmowanie, mnożenie, dzielenie, zadania</div>
+          Działania pisemne
         </a>
 
-        <div class="tile">
-          <div class="tag">Wkrótce</div>
-          <div class="t">Ułamki zwykłe</div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile">
-          <div class="tag">Wkrótce</div>
-          <div class="t">Ułamki dziesiętne</div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile">
-          <div class="tag">Wkrótce</div>
-          <div class="t">Figury geometryczne</div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile">
-          <div class="tag">Wkrótce</div>
-          <div class="t">Pola figur</div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile">
-          <div class="tag">Wkrótce</div>
-          <div class="t">Prostopadłościany i sześciany</div>
-          <div class="d">W przygotowaniu</div>
-        </div>
+        <div class="tile">Ułamki zwykłe</div>
+        <div class="tile">Ułamki dziesiętne</div>
+        <div class="tile">Figury geometryczne</div>
+        <div class="tile">Pola figur</div>
+        <div class="tile">Prostopadłościany i sześciany</div>
       </div>
     </section>
 
