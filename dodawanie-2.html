@@ -1,0 +1,262 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <title>Dodawanie pisemne – podstawowa (2–3 cyfrowe)</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+  <style>
+    :root{
+      --cellW: clamp(18px, 3.6vw, 32px);
+      --cellH: clamp(26px, 4.8vw, 40px);
+      --digitFont: clamp(16px, 2.6vw, 22px);
+      --exprFont: clamp(16px, 2.4vw, 22px);
+      --btnFont: clamp(14px, 2.2vw, 18px);
+    }
+
+    * { box-sizing: border-box; font-family: "Trebuchet MS", system-ui, sans-serif; }
+
+    body {
+      margin: 0;
+      padding: 20px 0;
+      background: #e0ecff;
+      display: flex;
+      justify-content: center;
+    }
+
+    .back-to-site{
+      position: fixed;
+      left: 14px;
+      top: 14px;
+      z-index: 9999;
+      border: 1px solid rgba(15,23,42,.18);
+      background: rgba(255,255,255,.92);
+      backdrop-filter: blur(8px);
+      padding: 10px 14px;
+      border-radius: 999px;
+      font-weight: 800;
+      cursor: pointer;
+      box-shadow: 0 10px 20px rgba(15,23,42,.12);
+    }
+
+    .pages{
+      width:100%;
+      display:flex;
+      justify-content:center;
+    }
+
+    .page{
+      background:#fff;
+      width:100%;
+      max-width:210mm;
+      padding:12mm 15mm;
+      border-radius:12px;
+      border:2px solid #7a869a;
+      box-shadow:0 0 10px rgba(15,23,42,.18);
+      position:relative;
+    }
+
+    h1{text-align:center;margin:0 0 8px;}
+    .subtitle{text-align:center;margin:0 0 12px;}
+
+    .info-box{
+      background:#f1f5f9;
+      border:1px solid #cbd5e1;
+      border-radius:12px;
+      padding:10px;
+      text-align:center;
+      margin-bottom:10px;
+    }
+
+    .score-badge{
+      position:absolute;
+      top:10mm;
+      right:15mm;
+      background:#0f172a;
+      color:#fff;
+      padding:6px 12px;
+      border-radius:999px;
+      font-size:14px;
+    }
+
+    .tasks-grid{
+      display:grid;
+      grid-template-columns:repeat(2,1fr);
+      gap:6mm;
+    }
+
+    .task-card{
+      background:#fafafa;
+      border:1px solid #e5e7eb;
+      border-radius:14px;
+      padding:10px;
+      display:flex;
+      justify-content:center; /* ✅ centrowanie */
+    }
+
+    .task-title{
+      font-weight:bold;
+      margin-bottom:6px;
+      text-align:left;
+    }
+
+    .expression{
+      font-family:"Courier New", monospace;
+      font-size:var(--exprFont);
+      display:inline-block; /* ✅ szerokość = liczby */
+    }
+
+    .digit-row{
+      display:flex;
+      justify-content:flex-end;
+    }
+
+    .sign-cell{
+      width:22px;
+      text-align:center;
+    }
+
+    .digit-cell{
+      width:var(--cellW);
+      text-align:center;
+    }
+
+    .result-row{
+      border-top:2px solid #334155; /* ✅ krótka kreska */
+      margin-top:2px;
+      padding-top:2px;
+    }
+
+    .digit-input{
+      width:calc(var(--cellW) - 2px);
+      height:var(--cellH);
+      border-radius:8px;
+      border:2px solid #93c5fd;
+      background:#f1f5ff;
+      font-family:"Courier New", monospace;
+      font-size:var(--digitFont);
+      text-align:center;
+      font-weight:800;
+    }
+
+    .is-correct{ border-color:#16a34a; background:#ecfdf5; }
+    .is-wrong{ border-color:#dc2626; background:#fef2f2; }
+
+    .toolbar-bottom{
+      display:flex;
+      justify-content:center;
+      gap:10px;
+      margin-top:14px;
+    }
+
+    .btn{
+      padding:10px 18px;
+      border-radius:999px;
+      border:none;
+      cursor:pointer;
+      color:#fff;
+      min-width:140px;
+      font-size:var(--btnFont);
+    }
+
+    .btn-check{ background:#16a34a; }
+    .btn-new{ background:#2563eb; }
+    .btn-print{ background:#475569; }
+
+    @media print{
+      .toolbar-bottom,.score-badge,.back-to-site{display:none;}
+    }
+  </style>
+</head>
+
+<body>
+
+<button class="back-to-site" onclick="location.href='dzialania-pisemne.html'">
+  ← Wróć do „Działania pisemne”
+</button>
+
+<div class="pages">
+<div class="page">
+
+  <div class="score-badge" id="score">Masz 0/12 poprawnie</div>
+
+  <h1>Dodawanie pisemne</h1>
+  <p class="subtitle">Wersja podstawowa (liczby 2–3 cyfrowe)</p>
+
+  <div class="info-box">
+    Wykonaj dodawanie pisemne. Wpisz wynik w puste okienka.
+  </div>
+
+  <div class="tasks-grid" id="grid"></div>
+
+  <div class="toolbar-bottom">
+    <button class="btn btn-check" onclick="checkAll()">Sprawdź</button>
+    <button class="btn btn-new" onclick="generate()">Nowa karta</button>
+    <button class="btn btn-print" onclick="window.print()">Drukuj</button>
+  </div>
+
+</div>
+</div>
+
+<script>
+const TASKS = 12;
+const grid = document.getElementById("grid");
+const score = document.getElementById("score");
+
+function r(min,max){ return Math.floor(Math.random()*(max-min+1))+min; }
+
+function generate(){
+  grid.innerHTML="";
+  score.textContent="Masz 0/12 poprawnie";
+
+  for(let i=1;i<=TASKS;i++){
+    const a = r(10,99);
+    const b = r(100,999);
+    const sum = a + b;
+
+    const card = document.createElement("div");
+    card.className="task-card";
+
+    const expr=document.createElement("div");
+    expr.className="expression";
+
+    [b,a,sum].forEach((n,j)=>{
+      const row=document.createElement("div");
+      row.className="digit-row"+(j===2?" result-row":"");
+      row.innerHTML =
+        `<div class="sign-cell">${j===1?"+":""}</div>` +
+        String(n).padStart(String(sum).length," ").split("")
+        .map(d => j<2
+          ? `<div class="digit-cell">${d===" "?"":d}</div>`
+          : `<div class="digit-cell"><input class="digit-input" data-e="${d}"></div>`
+        ).join("");
+      expr.appendChild(row);
+    });
+
+    card.appendChild(expr);
+    grid.appendChild(card);
+  }
+}
+
+function checkAll(){
+  let ok=0;
+  document.querySelectorAll(".task-card").forEach(card=>{
+    let good=true;
+    card.querySelectorAll("input").forEach(i=>{
+      if(i.value===i.dataset.e){
+        i.className="digit-input is-correct";
+      }else{
+        i.className="digit-input is-wrong";
+        good=false;
+      }
+    });
+    if(good) ok++;
+  });
+  score.textContent=`Masz ${ok}/12 poprawnie`;
+}
+
+generate();
+</script>
+
+</body>
+</html>
