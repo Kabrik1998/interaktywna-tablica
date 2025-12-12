@@ -14,273 +14,245 @@
       --border: rgba(31,41,55,.12);
       --shadow: 0 12px 40px rgba(31,41,55,.12);
       --accent: #3b82f6;
+      --accent-soft: rgba(59,130,246,.10);
       --accent2:#7c3aed;
-      --radius: 18px;
+      --radius-card: 22px;
+      --radius-tile: 20px;
     }
 
-    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Trebuchet MS", sans-serif; }
+    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, sans-serif; }
+
     body{
       margin:0;
       color:var(--ink);
-      background: radial-gradient(1200px 600px at 20% 0%, #fff 0%, var(--bg) 55%) fixed;
+      background:
+        radial-gradient(1200px 600px at 20% 0%, #fff 0%, var(--bg) 55%) fixed;
     }
+
     a{ color:inherit; text-decoration:none; }
 
-    .math-motif{
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .18;
-      background-image:
-        radial-gradient(circle at 16px 16px, rgba(31,41,55,.10) 2px, transparent 2.5px),
-        linear-gradient(rgba(31,41,55,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(31,41,55,.06) 1px, transparent 1px);
-      background-size: 32px 32px, 64px 64px, 64px 64px;
-      mix-blend-mode: multiply;
-      z-index: 0;
+    .wrap{
+      max-width:1120px;
+      margin:0 auto;
+      padding:26px 16px 48px;
+      position:relative;
+      z-index:1;
     }
 
-    .wrap{ max-width: 1120px; margin: 0 auto; padding: 18px 16px 40px; position:relative; z-index:1; }
-
+    /* ===== HEADER ===== */
     header{
-      display:flex; align-items:center; justify-content:space-between; gap:16px;
-      padding: 14px 14px;
-      background: rgba(255,250,242,.78);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
-      position: sticky;
-      top: 10px;
-      z-index: 20;
-      flex-wrap: wrap;
+      display:flex;
+      align-items:center;
+      justify-content:space-between;
+      gap:18px;
+      padding:16px 18px;
+      background:rgba(255,250,242,.85);
+      border:1px solid var(--border);
+      border-radius:24px;
+      box-shadow:var(--shadow);
+      position:sticky;
+      top:12px;
+      z-index:20;
+      flex-wrap:wrap;
     }
 
-    .brand{ display:flex; gap:12px; align-items:center; min-width: 240px; }
+    .brand{
+      display:flex;
+      gap:14px;
+      align-items:center;
+    }
 
     .logo{
-      width: 58px; height: 58px;
-      border-radius: 18px;
+      width:58px;
+      height:58px;
+      border-radius:18px;
       overflow:hidden;
-      border: 1px solid rgba(255,255,255,.60);
-      box-shadow: 0 12px 28px rgba(31,41,55,.12);
-      background: rgba(255,255,255,.55);
-      flex: 0 0 auto;
+      background:#fff;
+      box-shadow:0 10px 22px rgba(31,41,55,.12);
     }
-    .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .logo img{
+      width:100%;
+      height:100%;
+      object-fit:cover;
+    }
 
     .brand h1{
-      font-size: clamp(1.18rem, 2.1vw, 1.62rem);
       margin:0;
-      line-height:1.12;
-      letter-spacing: -0.02em;
-      font-weight: 950;
+      font-size:1.5rem;
+      font-weight:900;
+      letter-spacing:-0.02em;
     }
+
     .brand p{
-      margin:3px 0 0;
-      font-size: clamp(.98rem, 1.4vw, 1.08rem);
-      color: rgba(31,41,55,.74);
-      font-weight: 800;
+      margin:2px 0 0;
+      color:var(--muted);
+      font-weight:700;
     }
 
-    .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    .actions{
+      display:flex;
+      gap:10px;
+      flex-wrap:wrap;
+    }
+
     .btn{
-      border: 1px solid var(--border);
-      background: var(--panel);
-      padding: 10px 14px;
-      border-radius: 999px;
+      padding:9px 14px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:#fff;
+      font-weight:700;
       cursor:pointer;
-      box-shadow: 0 10px 22px rgba(31,41,55,.10);
-      font-weight: 750;
-      font-size: .95rem;
-      white-space: nowrap;
+      transition:background .2s ease, box-shadow .2s ease;
     }
-    .btn.primary{
-      background: linear-gradient(135deg, var(--accent), #60a5fa);
-      color: #fff;
-      border-color: rgba(59,130,246,.35);
-    }
-    .btn.ghost{ background: rgba(255,250,242,.75); }
 
+    .btn:hover{
+      background:#f9fafb;
+      box-shadow:0 6px 14px rgba(31,41,55,.10);
+    }
+
+    .btn.primary{
+      background:linear-gradient(135deg,var(--accent),#60a5fa);
+      color:#fff;
+      border:none;
+    }
+
+    /* ===== KARTY ===== */
     .card{
-      margin-top: 16px;
-      background: rgba(255,250,242,.86);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
-      box-shadow: var(--shadow);
-      padding: 18px;
-      position: relative;
-      overflow:hidden;
+      margin-top:26px;
+      background:rgba(255,250,242,.92);
+      border:1px solid var(--border);
+      border-radius:var(--radius-card);
+      box-shadow:var(--shadow);
+      padding:22px;
     }
 
     .headline{
-      margin: 0 0 12px;
-      font-size: clamp(1.05rem, 1.55vw, 1.25rem);
-      letter-spacing: -0.01em;
-      font-weight: 850;
-      text-align: left;
+      margin:0 0 18px;
+      font-size:1.15rem;
+      font-weight:800;
+      letter-spacing:-0.01em;
     }
 
+    /* ===== KAFELKI ===== */
     .tiles{
       display:grid;
-      grid-template-columns: repeat(4, 1fr);
-      gap: 16px;
+      grid-template-columns:repeat(4,1fr);
+      gap:18px;
     }
-    @media (max-width: 980px){ .tiles{ grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 520px){ .tiles{ grid-template-columns: 1fr; } }
+
+    @media(max-width:980px){
+      .tiles{ grid-template-columns:repeat(2,1fr); }
+    }
+
+    @media(max-width:520px){
+      .tiles{ grid-template-columns:1fr; }
+    }
 
     .tile{
-      background: rgba(255,250,242,.92);
-      border: 1px solid var(--border);
-      border-radius: 22px;
-      padding: 28px 24px;
-      box-shadow: 0 14px 34px rgba(31,41,55,.12);
-      display:flex; flex-direction:column; gap:10px;
-      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
-      min-height: 210px;
-      position: relative;
-      overflow:hidden;
+      position:relative;
+      min-height:140px;
+      border-radius:var(--radius-tile);
+      border:1px solid var(--border);
+
+      display:flex;
+      align-items:center;
+      justify-content:center;
+      text-align:center;
+
+      font-size:1.15rem;
+      font-weight:900;
+
+      background:
+        linear-gradient(135deg,
+          rgba(59,130,246,.06),
+          rgba(124,58,237,.04)
+        ),
+        #fffaf2;
+
+      box-shadow:0 14px 34px rgba(31,41,55,.10);
+      transition:
+        transform .28s cubic-bezier(.22,.61,.36,1),
+        box-shadow .28s cubic-bezier(.22,.61,.36,1),
+        background .28s ease;
     }
-    .tile::after{
+
+    /* cienki akcent u góry */
+    .tile::before{
       content:"";
       position:absolute;
-      inset:-2px;
-      background: radial-gradient(300px 180px at 10% 0%, rgba(59,130,246,.18), transparent 60%);
-      opacity:.95;
-      pointer-events:none;
+      top:0;
+      left:0;
+      right:0;
+      height:3px;
+      background:linear-gradient(90deg,var(--accent),var(--accent2));
+      opacity:.25;
     }
+
     .tile:hover{
-      transform: translateY(-4px);
-      box-shadow: 0 28px 66px rgba(31,41,55,.18);
-      border-color: rgba(59,130,246,.35);
+      transform:translateY(-6px);
+      box-shadow:0 28px 60px rgba(31,41,55,.16);
+      background:
+        linear-gradient(135deg,
+          rgba(59,130,246,.10),
+          rgba(124,58,237,.07)
+        ),
+        #fffaf2;
     }
 
-    .tile-top{
-      display:flex;
-      align-items:flex-start;
-      gap:12px;
-      position:relative;
-      z-index:1;
-    }
+    a.tile{ display:flex; }
 
-    .tile-icon{
-      width: 50px;
-      height: 50px;
-      border-radius: 16px;
-      background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(124,58,237,.18));
-      border: 1px solid rgba(255,255,255,.65);
-      display:grid;
-      place-items:center;
-      box-shadow: 0 10px 22px rgba(31,41,55,.10);
-      flex:0 0 auto;
-      margin-top: 2px;
-    }
-    .tile-icon svg{ width: 32px; height: 32px; }
-
-    .tag{
-      width: fit-content;
-      padding: 4px 10px;
-      border-radius: 999px;
-      background: rgba(59,130,246,.10);
-      border: 1px solid rgba(59,130,246,.18);
-      color: rgba(29,78,216,.95);
-      font-size: .78rem;
-      font-weight: 900;
-      position:relative;
-      z-index:1;
-      margin-bottom: 6px;
-    }
-
-    .t{
-      font-weight: 950;
-      font-size: 1.12rem;
-      line-height: 1.18;
-      position:relative;
-      z-index:1;
-      overflow-wrap: anywhere;
-      word-break: break-word;
-      hyphens: auto;
-    }
-
-    .d{
-      color: var(--muted);
-      font-size: .98rem;
-      margin-top:auto;
-      position:relative;
-      z-index:1;
-    }
-
-    .tile.disabled{
-      opacity: .55;
-      filter: grayscale(.15);
-      cursor: not-allowed;
-    }
-    .tile.disabled:hover{ transform:none; }
-
+    /* ===== KONTAKT ===== */
     .contact-grid{
       display:grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 14px;
-      margin-top: 10px;
-    }
-    @media (max-width: 720px){
-      .contact-grid{ grid-template-columns: 1fr; }
+      grid-template-columns:1fr 1fr;
+      gap:16px;
+      margin-top:10px;
     }
 
-    .field{ display:flex; flex-direction:column; gap:6px; }
-    label{ font-size:.85rem; color: var(--muted); }
+    @media(max-width:720px){
+      .contact-grid{ grid-template-columns:1fr; }
+    }
+
+    label{
+      font-size:.85rem;
+      color:var(--muted);
+    }
+
     input{
-      border: 1px solid var(--border);
-      background: #fff;
-      padding: 10px 12px;
-      border-radius: 12px;
-      font-size: 1rem;
-      outline: none;
+      padding:10px 12px;
+      border-radius:14px;
+      border:1px solid var(--border);
+      font-size:1rem;
     }
+
     input:focus{
-      border-color: rgba(59,130,246,.55);
-      box-shadow: 0 0 0 4px rgba(59,130,246,.12);
+      outline:none;
+      border-color:rgba(59,130,246,.5);
+      box-shadow:0 0 0 4px rgba(59,130,246,.12);
     }
-    .minirow{ display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap; }
+
+    .minirow{
+      display:flex;
+      gap:12px;
+      margin-top:14px;
+    }
 
     footer{
-      margin-top: 18px;
+      margin-top:26px;
       text-align:center;
-      color: rgba(31,41,55,.70);
-      font-size: .9rem;
-      padding: 0 6px;
+      color:var(--muted);
+      font-size:.9rem;
     }
-
-    .modal-backdrop{
-      position: fixed; inset: 0;
-      background: rgba(15,23,42,.45);
-      display:none;
-      align-items:center; justify-content:center;
-      padding: 16px;
-      z-index: 50;
-    }
-    .modal{
-      width: min(560px, 100%);
-      background: var(--panel);
-      border: 1px solid rgba(255,255,255,.25);
-      border-radius: 18px;
-      box-shadow: 0 25px 60px rgba(15,23,42,.25);
-      padding: 16px;
-    }
-    .modal h3{ margin: 0 0 6px; }
-    .modal p{ margin: 0 0 12px; color: var(--muted); line-height:1.45; }
-    .modal .row{ display:flex; gap:10px; justify-content:flex-end; margin-top: 12px; }
   </style>
 </head>
 
 <body>
-  <div class="math-motif" aria-hidden="true"></div>
-
   <div class="wrap">
     <header>
       <div class="brand">
-        <div class="logo" aria-hidden="true">
-          <img src="bryly.png" alt="Bryły geometryczne" />
+        <div class="logo">
+          <img src="bryly.png" alt="">
         </div>
         <div>
           <h1>Interaktywna tablica matematyczna</h1>
@@ -289,239 +261,47 @@
       </div>
 
       <div class="actions">
-        <button class="btn" id="openLogin">Zaloguj</button>
-        <button class="btn ghost" id="openTeacher">Panel nauczyciela</button>
-        <button class="btn primary" id="openAbout">O mnie</button>
+        <button class="btn">Zaloguj</button>
+        <button class="btn">Panel nauczyciela</button>
+        <button class="btn primary">O mnie</button>
       </div>
     </header>
 
     <section class="card">
       <h2 class="headline">Wybierz klasę</h2>
-
-      <div class="tiles" aria-label="Kategorie">
-        <a class="tile" href="klasa4.html">
-          <div class="tile-top">
-            <div class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
-                <path d="M12 26L32 14L52 26L32 38L12 26Z" fill="#6366f1"/>
-                <path d="M12 26V44L32 56V38L12 26Z" fill="#818cf8"/>
-                <path d="M52 26V44L32 56V38L52 26Z" fill="#a5b4fc"/>
-              </svg>
-            </div>
-            <div>
-              <div class="tag">Aktywne</div>
-              <div class="t">Klasa 4</div>
-            </div>
-          </div>
-          <div class="d">Działy + karty pracy</div>
-        </a>
-
-        <div class="tile disabled" aria-disabled="true">
-          <div class="tile-top">
-            <div class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
-                <circle cx="32" cy="32" r="18" fill="#34d399"/>
-                <circle cx="25" cy="26" r="7" fill="rgba(255,255,255,.45)"/>
-              </svg>
-            </div>
-            <div>
-              <div class="tag">Wkrótce</div>
-              <div class="t">Klasa 5</div>
-            </div>
-          </div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile disabled" aria-disabled="true">
-          <div class="tile-top">
-            <div class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
-                <path d="M32 14L52 46H12L32 14Z" fill="#fbbf24"/>
-                <path d="M12 46L32 30L52 46" stroke="rgba(255,255,255,.35)" stroke-width="3" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div>
-              <div class="tag">Wkrótce</div>
-              <div class="t">Klasa 6</div>
-            </div>
-          </div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile disabled" aria-disabled="true">
-          <div class="tile-top">
-            <div class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
-                <ellipse cx="32" cy="18" rx="16" ry="7" fill="#60a5fa"/>
-                <path d="M16 18V44C16 48 23 52 32 52C41 52 48 48 48 44V18" fill="#93c5fd"/>
-                <ellipse cx="32" cy="44" rx="16" ry="7" fill="#60a5fa"/>
-              </svg>
-            </div>
-            <div>
-              <div class="tag">Wkrótce</div>
-              <div class="t">Klasa 7</div>
-            </div>
-          </div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile disabled" aria-disabled="true">
-          <div class="tile-top">
-            <div class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
-                <path d="M32 14L52 46H12L32 14Z" fill="#a78bfa"/>
-                <ellipse cx="32" cy="46" rx="20" ry="7" fill="#c4b5fd"/>
-              </svg>
-            </div>
-            <div>
-              <div class="tag">Wkrótce</div>
-              <div class="t">Klasa 8</div>
-            </div>
-          </div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile disabled" aria-disabled="true">
-          <div class="tile-top">
-            <div class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
-                <path d="M18 12H38L46 20V52H18V12Z" fill="#22c55e"/>
-                <path d="M38 12V20H46" fill="rgba(255,255,255,.35)"/>
-                <path d="M24 28H40" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/>
-                <path d="M24 36H38" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/>
-              </svg>
-            </div>
-            <div>
-              <div class="tag">Wkrótce</div>
-              <div class="t">Arkusze egzaminacyjne</div>
-            </div>
-          </div>
-          <div class="d">W przygotowaniu</div>
-        </div>
-
-        <div class="tile disabled" aria-disabled="true">
-          <div class="tile-top">
-            <div class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
-                <path d="M18 18H30C30 14 34 14 34 18H46V30C50 30 50 34 46 34V46H34C34 50 30 50 30 46H18V34C14 34 14 30 18 30V18Z" fill="#f97316"/>
-              </svg>
-            </div>
-            <div>
-              <div class="tag">Wkrótce</div>
-              <div class="t">Inne</div>
-            </div>
-          </div>
-          <div class="d">Do uzupełnienia</div>
-        </div>
-
-        <div class="tile disabled" aria-disabled="true">
-          <div class="tile-top">
-            <div class="tile-icon" aria-hidden="true">
-              <svg viewBox="0 0 64 64" fill="none">
-                <path d="M18 18H30C30 14 34 14 34 18H46V30C50 30 50 34 46 34V46H34C34 50 30 50 30 46H18V34C14 34 14 30 18 30V18Z" fill="#f97316"/>
-              </svg>
-            </div>
-            <div>
-              <div class="tag">Wkrótce</div>
-              <div class="t">Inne</div>
-            </div>
-          </div>
-          <div class="d">Do uzupełnienia</div>
-        </div>
+      <div class="tiles">
+        <a class="tile" href="klasa4.html">Klasa 4</a>
+        <div class="tile">Klasa 5</div>
+        <div class="tile">Klasa 6</div>
+        <div class="tile">Klasa 7</div>
+        <div class="tile">Klasa 8</div>
+        <div class="tile">Arkusze egzaminacyjne</div>
+        <div class="tile">Inne</div>
+        <div class="tile">Inne</div>
       </div>
     </section>
 
     <section class="card">
       <h2 class="headline">Kontakt</h2>
       <div class="contact-grid">
-        <div class="field">
-          <label for="contact">E-mail</label>
-          <input id="contact" type="email" placeholder="twoj@email.pl" />
+        <div>
+          <label>E-mail</label>
+          <input type="email" placeholder="twoj@email.pl">
         </div>
-        <div class="field">
-          <label for="msg">Wiadomość</label>
-          <input id="msg" type="text" placeholder="Napisz w czym mogę pomóc..." />
+        <div>
+          <label>Wiadomość</label>
+          <input type="text" placeholder="Napisz w czym mogę pomóc…">
         </div>
       </div>
       <div class="minirow">
-        <button class="btn primary" type="button" onclick="alert('To miejsce na formularz – po wdrożeniu podepniemy wysyłkę.');">Wyślij</button>
-        <a class="btn" href="mailto:twoj@email.pl">Napisz e-mail</a>
+        <button class="btn primary">Wyślij</button>
+        <button class="btn">Napisz e-mail</button>
       </div>
     </section>
 
     <footer>
-      © <span id="year"></span> Interaktywna tablica matematyczna
+      © 2025 Interaktywna tablica matematyczna
     </footer>
   </div>
-
-  <div class="modal-backdrop" id="modalLogin">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
-      <h3 id="loginTitle">Logowanie</h3>
-      <p>To miejsce na przyszłe logowanie (makieta).</p>
-      <div class="field">
-        <label for="login">Login</label>
-        <input id="login" type="text" placeholder="np. uczen01" />
-      </div>
-      <div class="field" style="margin-top:10px;">
-        <label for="pass">Hasło</label>
-        <input id="pass" type="password" placeholder="••••••••" />
-      </div>
-      <div class="row">
-        <button class="btn" id="closeLogin">Zamknij</button>
-        <button class="btn primary" onclick="alert('Makieta: tu podepniemy prawdziwe logowanie.');">Zaloguj</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="modalAbout">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
-      <h3 id="aboutTitle">O mnie</h3>
-      <p>Tu wstawisz krótki opis.</p>
-      <div class="row">
-        <button class="btn primary" id="closeAbout">Zamknij</button>
-      </div>
-    </div>
-  </div>
-
-  <div class="modal-backdrop" id="modalTeacher">
-    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="teacherTitle">
-      <h3 id="teacherTitle">Panel nauczyciela</h3>
-      <p>Tu będzie panel nauczyciela (makieta).</p>
-      <div class="row">
-        <button class="btn primary" id="closeTeacher">Zamknij</button>
-      </div>
-    </div>
-  </div>
-
-  <script>
-    document.getElementById("year").textContent = new Date().getFullYear();
-
-    const modalLogin = document.getElementById("modalLogin");
-    const modalAbout = document.getElementById("modalAbout");
-    const modalTeacher = document.getElementById("modalTeacher");
-
-    document.getElementById("openLogin").addEventListener("click", () => {
-      modalLogin.style.display = "flex";
-      setTimeout(() => document.getElementById("login").focus(), 50);
-    });
-    document.getElementById("closeLogin").addEventListener("click", () => modalLogin.style.display = "none");
-    modalLogin.addEventListener("click", (e) => { if(e.target === modalLogin) modalLogin.style.display = "none"; });
-
-    document.getElementById("openAbout").addEventListener("click", () => { modalAbout.style.display = "flex"; });
-    document.getElementById("closeAbout").addEventListener("click", () => modalAbout.style.display = "none");
-    modalAbout.addEventListener("click", (e) => { if(e.target === modalAbout) modalAbout.style.display = "none"; });
-
-    document.getElementById("openTeacher").addEventListener("click", () => { modalTeacher.style.display = "flex"; });
-    document.getElementById("closeTeacher").addEventListener("click", () => modalTeacher.style.display = "none");
-    modalTeacher.addEventListener("click", (e) => { if(e.target === modalTeacher) modalTeacher.style.display = "none"; });
-
-    document.addEventListener("keydown", (e) => {
-      if(e.key === "Escape"){
-        modalLogin.style.display = "none";
-        modalAbout.style.display = "none";
-        modalTeacher.style.display = "none";
-      }
-    });
-  </script>
 </body>
 </html>
