@@ -1,223 +1,163 @@
+
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Klasa 4 – Dodawanie pisemne</title>
+  <title>Klasa 4 – działy</title>
   <style>
     :root{
-      --bg: #f6f0e8;
-      --panel: #fffaf2;
-      --ink: #1f2937;
-      --muted: #6b7280;
-      --border: rgba(31,41,55,.12);
-      --shadow: 0 12px 40px rgba(31,41,55,.12);
-      --accent: #3b82f6;
-      --accent2:#7c3aed;
-      --radius: 18px;
+      --bg:#f6f0e8; --panel:#fffaf2; --ink:#1f2937; --muted:#6b7280;
+      --border: rgba(31,41,55,.12); --shadow: 0 12px 40px rgba(31,41,55,.12);
+      --accent:#3b82f6; --radius:18px;
     }
     *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Trebuchet MS", sans-serif; }
-    body{
-      margin:0;
-      color:var(--ink);
-      background: radial-gradient(1200px 600px at 20% 0%, #fff 0%, var(--bg) 55%) fixed;
-    }
+    body{ margin:0; color:var(--ink); background: radial-gradient(1200px 600px at 20% 0%, #fff 0%, var(--bg) 55%) fixed; }
     a{ color:inherit; text-decoration:none; }
-
-    .math-motif{
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      opacity: .18;
-      background-image:
-        radial-gradient(circle at 16px 16px, rgba(31,41,55,.10) 2px, transparent 2.5px),
-        linear-gradient(rgba(31,41,55,.06) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(31,41,55,.06) 1px, transparent 1px);
-      background-size: 32px 32px, 64px 64px, 64px 64px;
-      mix-blend-mode: multiply;
-      z-index: 0;
-    }
-
-    .wrap{ max-width: 1200px; margin: 0 auto; padding: 18px 16px 24px; position:relative; z-index:1; }
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 18px 16px 40px; }
     header{
       display:flex; align-items:center; justify-content:space-between; gap:12px;
-      padding: 14px 14px;
-      background: rgba(255,250,242,.78);
-      border: 1px solid var(--border);
-      border-radius: var(--radius);
+      padding:14px; background: rgba(255,250,242,.78);
+      border:1px solid var(--border); border-radius: var(--radius);
       box-shadow: var(--shadow);
-      backdrop-filter: blur(10px);
     }
-    .left{ display:flex; gap:12px; align-items:center; }
-
-    .logo{
-      width: 46px; height: 46px; border-radius: 16px;
-      background: linear-gradient(135deg, var(--accent), rgba(124,58,237,.85));
-      display:grid; place-items:center;
-      box-shadow: 0 12px 28px rgba(59,130,246,.22);
-      border: 1px solid rgba(255,255,255,.35);
-    }
-    .logo svg{ width: 30px; height: 30px; }
-
-    h1{ margin:0; font-size: 1.05rem; }
-    .crumb{ margin:0; font-size:.85rem; color:var(--muted); }
-
-    .bar{
-      margin-top: 14px;
-      display:flex;
-      gap:10px;
-      flex-wrap:wrap;
-      align-items:center;
-      justify-content:space-between;
-    }
-    .tabs{
-      display:flex; gap:10px; flex-wrap:wrap;
-      background: rgba(255,250,242,.78);
-      border:1px solid var(--border);
-      border-radius: 999px;
-      padding: 6px;
-      box-shadow: 0 10px 22px rgba(31,41,55,.10);
-    }
-    .tab{
-      border: 0;
-      background: transparent;
-      padding: 10px 14px;
-      border-radius: 999px;
-      cursor:pointer;
-      font-weight: 800;
-      color: rgba(31,41,55,.85);
-      font-size: .95rem;
-    }
-    .tab[aria-selected="true"]{
-      background: linear-gradient(135deg, var(--accent), #60a5fa);
-      color: #fff;
-      box-shadow: 0 10px 20px rgba(59,130,246,.18);
-    }
-
-    .tools{ display:flex; gap:10px; flex-wrap:wrap; justify-content:flex-end; }
     .btn{
       border: 1px solid var(--border);
-      background: rgba(255,250,242,.92);
+      background: var(--panel);
       padding: 10px 12px;
       border-radius: 999px;
       cursor:pointer;
       box-shadow: 0 10px 22px rgba(31,41,55,.10);
-      font-weight: 700;
+      font-weight: 650;
       font-size: .95rem;
     }
     .btn.primary{
       background: linear-gradient(135deg, var(--accent), #60a5fa);
-      color:#fff;
-      border-color: rgba(59,130,246,.35);
+      color:#fff; border-color: rgba(59,130,246,.35);
     }
-
-    .frame-wrap{
-      margin-top: 14px;
+    .card{
+      margin-top:16px;
+      background: rgba(255,250,242,.86);
       border: 1px solid var(--border);
-      background: rgba(255,250,242,.78);
       border-radius: var(--radius);
       box-shadow: var(--shadow);
-      overflow:hidden;
+      padding: 18px;
     }
+    h1{ margin:0 0 6px; font-size: clamp(1.3rem, 2.1vw, 1.7rem); }
+    p{ margin:0; color:var(--muted); }
 
-    iframe{
-      width: 100%;
-      height: min(82vh, 980px);
-      border: 0;
-      background: #fff;
+    .tiles{
+      margin-top: 14px;
+      display:grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 14px;
     }
-
-    @media (max-width: 700px){
-      iframe{ height: 82vh; }
+    @media (max-width: 980px){ .tiles{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px){ .tiles{ grid-template-columns: 1fr; } }
+    .tile{
+      background: rgba(255,250,242,.92);
+      border: 1px solid var(--border);
+      border-radius: 18px;
+      padding: 16px 16px;
+      box-shadow: 0 12px 26px rgba(31,41,55,.10);
+      display:flex; flex-direction:column; gap:8px;
+      min-height: 110px;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      position:relative; overflow:hidden;
     }
-
-    .note{
-      margin-top: 10px;
-      color: var(--muted);
-      font-size: .92rem;
-      line-height: 1.45;
-      padding: 0 6px;
+    .tile::after{
+      content:""; position:absolute; inset:-2px;
+      background: radial-gradient(240px 140px at 10% 0%, rgba(59,130,246,.18), transparent 60%);
+      opacity:.95; pointer-events:none;
     }
+    .tile:hover{ transform: translateY(-2px); box-shadow: 0 18px 44px rgba(31,41,55,.14); border-color: rgba(59,130,246,.25); }
+    .t{ font-weight: 850; position:relative; z-index:1; }
+    .d{ color: var(--muted); font-size:.92rem; margin-top:auto; position:relative; z-index:1; }
+    .tag{
+      width:fit-content; padding:4px 10px; border-radius:999px;
+      background: rgba(59,130,246,.10);
+      border: 1px solid rgba(59,130,246,.18);
+      color: rgba(29,78,216,.95);
+      font-size:.78rem; font-weight:800;
+      position:relative; z-index:1;
+    }
+    footer{ margin-top:18px; color: rgba(31,41,55,.70); font-size:.9rem; text-align:center; }
   </style>
 </head>
 <body>
-  <div class="math-motif" aria-hidden="true"></div>
-
   <div class="wrap">
     <header>
-      <div class="left">
-        <div class="logo" aria-hidden="true">
-          <svg viewBox="0 0 64 64" fill="none">
-            <path d="M14 26L32 16L50 26L32 36L14 26Z" fill="rgba(255,255,255,.92)"/>
-            <path d="M14 26V44L32 54V36L14 26Z" fill="rgba(255,255,255,.70)"/>
-            <path d="M50 26V44L32 54V36L50 26Z" fill="rgba(255,255,255,.55)"/>
-            <path d="M44 46C44 52 39 56 32 56C25 56 20 52 20 46C20 44 21 42 22 40L32 22L42 40C43 42 44 44 44 46Z" fill="rgba(255,255,255,.30)"/>
-          </svg>
-        </div>
-        <div>
-          <h1>Klasa 4 – Dodawanie pisemne</h1>
-          <p class="crumb"><a href="index.html">Strona główna</a> / Klasa 4</p>
-        </div>
+      <div>
+        <strong>Klasa 4</strong><br/>
+        <span style="color:rgba(31,41,55,.70); font-size:.9rem;">Wybierz dział</span>
       </div>
-      <div class="tools">
-        <a class="btn" href="index.html">← Wróć</a>
-        <a class="btn primary" id="openNew" href="dodawanie 2.html" target="_blank" rel="noopener">Otwórz w nowej karcie</a>
+      <div style="display:flex; gap:10px; flex-wrap:wrap;">
+        <a class="btn" href="index.html">Strona główna</a>
+        <a class="btn primary" href="dzialania-pisemne.html">Działania pisemne</a>
       </div>
     </header>
 
-    <div class="bar">
-      <div class="tabs" role="tablist" aria-label="Wybór karty pracy">
-        <button class="tab" id="t1" role="tab" aria-selected="true">Podstawowa (3+2)</button>
-        <button class="tab" id="t2" role="tab" aria-selected="false">Trudniejsza (3–4 cyfry)</button>
-      </div>
-      <div class="tools">
-        <button class="btn" id="reload">Odśwież kartę</button>
-        <button class="btn" id="fullscreen">Pełny ekran</button>
-      </div>
-    </div>
+    <section class="card">
+      <h1>Działy – Klasa 4</h1>
+      <p>Kliknij dział, żeby przejść do kart pracy (na razie aktywne: Działania pisemne).</p>
 
-    <div class="frame-wrap">
-      <iframe id="sheet" title="Karta pracy – dodawanie pisemne" src="dodawanie 2.html"></iframe>
-    </div>
+      <div class="tiles">
+        <div class="tile">
+          <div class="tag">Wkrótce</div>
+          <div class="t">Liczby i działania</div>
+          <div class="d">W przygotowaniu</div>
+        </div>
 
-    <p class="note">
-      Wskazówka: na tablicy interaktywnej wygodnie działa tryb „Pełny ekran”.
-      Przycisk „Odśwież kartę” przeładowuje wybraną kartę pracy.
-    </p>
+        <div class="tile">
+          <div class="tag">Wkrótce</div>
+          <div class="t">Systemy zapisywania liczb</div>
+          <div class="d">W przygotowaniu</div>
+        </div>
+
+        <!-- AKTYWNE -->
+        <a class="tile" href="dzialania-pisemne.html">
+          <div class="tag">Aktywne</div>
+          <div class="t">Działania pisemne</div>
+          <div class="d">Dodawanie, odejmowanie, mnożenie, dzielenie, zadania</div>
+        </a>
+
+        <div class="tile">
+          <div class="tag">Wkrótce</div>
+          <div class="t">Ułamki zwykłe</div>
+          <div class="d">W przygotowaniu</div>
+        </div>
+
+        <div class="tile">
+          <div class="tag">Wkrótce</div>
+          <div class="t">Ułamki dziesiętne</div>
+          <div class="d">W przygotowaniu</div>
+        </div>
+
+        <div class="tile">
+          <div class="tag">Wkrótce</div>
+          <div class="t">Figury geometryczne</div>
+          <div class="d">W przygotowaniu</div>
+        </div>
+
+        <div class="tile">
+          <div class="tag">Wkrótce</div>
+          <div class="t">Pola figur</div>
+          <div class="d">W przygotowaniu</div>
+        </div>
+
+        <div class="tile">
+          <div class="tag">Wkrótce</div>
+          <div class="t">Prostopadłościany i sześciany</div>
+          <div class="d">W przygotowaniu</div>
+        </div>
+      </div>
+    </section>
+
+    <footer>© <span id="year"></span> Interaktywna tablica matematyczna</footer>
   </div>
 
   <script>
-    const t1 = document.getElementById('t1');
-    const t2 = document.getElementById('t2');
-    const frame = document.getElementById('sheet');
-    const openNew = document.getElementById('openNew');
-
-    // ✅ Twoje nazwy plików:
-    const SRC1 = "dodawanie 2.html";
-    const SRC2 = "dodawanie trudniejsze.html";
-
-    function select(which){
-      const is1 = which === 1;
-      t1.setAttribute('aria-selected', is1 ? 'true' : 'false');
-      t2.setAttribute('aria-selected', !is1 ? 'true' : 'false');
-
-      const src = is1 ? SRC1 : SRC2;
-      frame.src = src;
-      openNew.href = src;
-    }
-
-    t1.addEventListener('click', () => select(1));
-    t2.addEventListener('click', () => select(2));
-
-    document.getElementById('reload').addEventListener('click', () => {
-      frame.contentWindow.location.reload();
-    });
-
-    document.getElementById('fullscreen').addEventListener('click', async () => {
-      const el = document.querySelector('.frame-wrap');
-      if (!document.fullscreenElement) await el.requestFullscreen?.();
-      else await document.exitFullscreen?.();
-    });
+    document.getElementById("year").textContent = new Date().getFullYear();
   </script>
 </body>
 </html>
