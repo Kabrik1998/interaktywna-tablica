@@ -1,0 +1,375 @@
+
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Interaktywna tablica matematyczna</title>
+  <style>
+    :root{
+      --bg: #f6f0e8;
+      --panel: #fffaf2;
+      --ink: #1f2937;
+      --muted: #6b7280;
+      --border: rgba(31,41,55,.12);
+      --shadow: 0 12px 40px rgba(31,41,55,.12);
+      --accent: #3b82f6;
+      --accent2:#7c3aed;
+      --radius: 18px;
+    }
+    *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Trebuchet MS", sans-serif; }
+    body{
+      margin:0;
+      color:var(--ink);
+      background: radial-gradient(1200px 600px at 20% 0%, #fff 0%, var(--bg) 55%) fixed;
+    }
+    a{ color:inherit; text-decoration:none; }
+
+    .math-motif{
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      opacity: .18;
+      background-image:
+        radial-gradient(circle at 16px 16px, rgba(31,41,55,.10) 2px, transparent 2.5px),
+        linear-gradient(rgba(31,41,55,.06) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(31,41,55,.06) 1px, transparent 1px);
+      background-size: 32px 32px, 64px 64px, 64px 64px;
+      mix-blend-mode: multiply;
+      z-index: 0;
+    }
+
+    .wrap{ max-width: 1100px; margin: 0 auto; padding: 18px 16px 40px; position:relative; z-index:1; }
+
+    header{
+      display:flex; align-items:center; justify-content:space-between; gap:16px;
+      padding: 14px 14px;
+      background: rgba(255,250,242,.78);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      backdrop-filter: blur(10px);
+      position: sticky;
+      top: 10px;
+      z-index: 20;
+    }
+    .brand{
+      display:flex; gap:12px; align-items:center;
+      min-width: 240px;
+    }
+    .logo{
+      width: 46px; height: 46px; border-radius: 16px;
+      background: linear-gradient(135deg, var(--accent), rgba(124,58,237,.85));
+      display:grid; place-items:center;
+      box-shadow: 0 12px 28px rgba(59,130,246,.22);
+      border: 1px solid rgba(255,255,255,.35);
+    }
+    .logo svg{ width: 30px; height: 30px; }
+
+    .brand h1{ font-size: 1.05rem; margin:0; line-height:1.2; }
+    .brand p{ margin:0; font-size:.85rem; color:var(--muted); }
+
+    .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
+    .btn{
+      border: 1px solid var(--border);
+      background: var(--panel);
+      padding: 10px 12px;
+      border-radius: 999px;
+      cursor:pointer;
+      box-shadow: 0 10px 22px rgba(31,41,55,.10);
+      font-weight: 650;
+      font-size: .95rem;
+    }
+    .btn.primary{
+      background: linear-gradient(135deg, var(--accent), #60a5fa);
+      color: #fff;
+      border-color: rgba(59,130,246,.35);
+    }
+
+    .hero{
+      margin-top: 18px;
+      display:grid;
+      grid-template-columns: 1.4fr .6fr;
+      gap: 16px;
+      align-items: start;
+    }
+    @media (max-width: 860px){
+      .hero{ grid-template-columns: 1fr; }
+      header{ position: static; }
+      .brand{ min-width: 0; }
+    }
+
+    .card{
+      background: rgba(255,250,242,.86);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      padding: 18px;
+      position: relative;
+      overflow:hidden;
+    }
+
+    .headline{
+      margin: 0 0 8px;
+      font-size: clamp(1.35rem, 2.2vw, 1.9rem);
+      letter-spacing: -0.02em;
+    }
+    .sub{
+      margin: 0;
+      color: var(--muted);
+      line-height: 1.45;
+      font-size: 1rem;
+    }
+
+    .tiles{
+      margin-top: 16px;
+      display:grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 12px;
+    }
+    @media (max-width: 980px){ .tiles{ grid-template-columns: repeat(3, 1fr); } }
+    @media (max-width: 720px){ .tiles{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 420px){ .tiles{ grid-template-columns: 1fr; } }
+
+    .tile{
+      background: rgba(255,250,242,.92);
+      border: 1px solid var(--border);
+      border-radius: 16px;
+      padding: 14px 14px;
+      box-shadow: 0 12px 26px rgba(31,41,55,.10);
+      display:flex; flex-direction:column; gap:8px;
+      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
+      min-height: 96px;
+      position: relative;
+      overflow:hidden;
+    }
+    .tile::after{
+      content:"";
+      position:absolute;
+      inset:-2px;
+      background: radial-gradient(220px 120px at 10% 0%, rgba(59,130,246,.18), transparent 60%);
+      opacity:.9;
+      pointer-events:none;
+    }
+    .tile:hover{
+      transform: translateY(-2px);
+      box-shadow: 0 18px 44px rgba(31,41,55,.14);
+      border-color: rgba(59,130,246,.25);
+    }
+    .tile .t{ font-weight: 850; letter-spacing: .02em; position:relative; z-index:1; }
+    .tile .d{ color: var(--muted); font-size: .9rem; margin-top:auto; position:relative; z-index:1; }
+    .tile .tag{
+      width: fit-content;
+      padding: 4px 10px;
+      border-radius: 999px;
+      background: rgba(59,130,246,.10);
+      border: 1px solid rgba(59,130,246,.18);
+      color: rgba(29,78,216,.95);
+      font-size: .78rem;
+      font-weight: 800;
+      position:relative; z-index:1;
+    }
+    .tile.disabled{
+      opacity: .55;
+      filter: grayscale(.15);
+      cursor: not-allowed;
+    }
+    .tile.disabled:hover{ transform:none; }
+
+    .side h3{ margin:0 0 8px; font-size: 1.05rem; }
+    .field{ display:flex; flex-direction:column; gap:6px; margin-top: 10px; }
+    label{ font-size:.85rem; color: var(--muted); }
+    input{
+      border: 1px solid var(--border);
+      background: #fff;
+      padding: 10px 12px;
+      border-radius: 12px;
+      font-size: 1rem;
+      outline: none;
+    }
+    input:focus{
+      border-color: rgba(59,130,246,.55);
+      box-shadow: 0 0 0 4px rgba(59,130,246,.12);
+    }
+    .minirow{ display:flex; gap:10px; margin-top: 12px; flex-wrap:wrap; }
+
+    footer{
+      margin-top: 18px;
+      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      color: rgba(31,41,55,.70);
+      font-size: .9rem;
+      padding: 0 6px;
+    }
+    .links{ display:flex; gap:10px; flex-wrap:wrap; }
+    .link{
+      border: 1px solid var(--border);
+      background: rgba(255,250,242,.9);
+      padding: 7px 10px;
+      border-radius: 999px;
+    }
+
+    .modal-backdrop{
+      position: fixed; inset: 0;
+      background: rgba(15,23,42,.45);
+      display:none;
+      align-items:center; justify-content:center;
+      padding: 16px;
+      z-index: 50;
+    }
+    .modal{
+      width: min(520px, 100%);
+      background: var(--panel);
+      border: 1px solid rgba(255,255,255,.25);
+      border-radius: 18px;
+      box-shadow: 0 25px 60px rgba(15,23,42,.25);
+      padding: 16px;
+    }
+    .modal h3{ margin: 0 0 6px; }
+    .modal p{ margin: 0 0 12px; color: var(--muted); }
+    .modal .row{ display:flex; gap:10px; justify-content:flex-end; margin-top: 12px; }
+  </style>
+</head>
+<body>
+  <div class="math-motif" aria-hidden="true"></div>
+
+  <div class="wrap">
+    <header>
+      <div class="brand">
+        <div class="logo" aria-hidden="true">
+          <svg viewBox="0 0 64 64" fill="none">
+            <path d="M14 26L32 16L50 26L32 36L14 26Z" fill="rgba(255,255,255,.92)"/>
+            <path d="M14 26V44L32 54V36L14 26Z" fill="rgba(255,255,255,.70)"/>
+            <path d="M50 26V44L32 54V36L50 26Z" fill="rgba(255,255,255,.55)"/>
+            <path d="M44 46C44 52 39 56 32 56C25 56 20 52 20 46C20 44 21 42 22 40L32 22L42 40C43 42 44 44 44 46Z" fill="rgba(255,255,255,.30)"/>
+          </svg>
+        </div>
+        <div>
+          <h1>Interaktywna tablica matematyczna</h1>
+          <p>Karty pracy online</p>
+        </div>
+      </div>
+      <div class="actions">
+        <button class="btn" id="openLogin">Zaloguj</button>
+        <a class="btn primary" href="klasa4.html">Klasa 4</a>
+      </div>
+    </header>
+
+    <section class="hero">
+      <div class="card">
+        <h2 class="headline">Wybierz klasę</h2>
+        <p class="sub">
+          Karty pracy otwierają się dopiero po wejściu do wybranej klasy.
+        </p>
+
+        <div class="tiles" aria-label="Kategorie">
+          <a class="tile" href="klasa4.html">
+            <div class="tag">Aktywne</div>
+            <div class="t">Klasa 4</div>
+            <div class="d">Dodawanie pisemne (2 karty)</div>
+          </a>
+
+          <div class="tile disabled" aria-disabled="true">
+            <div class="tag">Wkrótce</div>
+            <div class="t">Klasa 5</div>
+            <div class="d">W przygotowaniu</div>
+          </div>
+
+          <div class="tile disabled" aria-disabled="true">
+            <div class="tag">Wkrótce</div>
+            <div class="t">Klasa 6</div>
+            <div class="d">W przygotowaniu</div>
+          </div>
+
+          <div class="tile disabled" aria-disabled="true">
+            <div class="tag">Wkrótce</div>
+            <div class="t">Klasa 7</div>
+            <div class="d">W przygotowaniu</div>
+          </div>
+
+          <div class="tile disabled" aria-disabled="true">
+            <div class="tag">Wkrótce</div>
+            <div class="t">Klasa 8</div>
+            <div class="d">W przygotowaniu</div>
+          </div>
+
+          <div class="tile disabled" aria-disabled="true">
+            <div class="tag">Wkrótce</div>
+            <div class="t">Arkusze egzaminacyjne</div>
+            <div class="d">W przygotowaniu</div>
+          </div>
+
+          <div class="tile disabled" aria-disabled="true">
+            <div class="tag">Wkrótce</div>
+            <div class="t">Inne</div>
+            <div class="d">Zagadki i zabawy</div>
+          </div>
+        </div>
+      </div>
+
+      <aside class="card side">
+        <h3>Kontakt</h3>
+        <div class="field">
+          <label for="contact">E-mail</label>
+          <input id="contact" type="email" placeholder="twoj@email.pl" />
+        </div>
+        <div class="field">
+          <label for="msg">Wiadomość</label>
+          <input id="msg" type="text" placeholder="Napisz w czym mogę pomóc..." />
+        </div>
+        <div class="minirow">
+          <button class="btn primary" type="button" onclick="alert('To miejsce na formularz – po wdrożeniu podepniemy wysyłkę.');">Wyślij</button>
+          <a class="btn" href="mailto:twoj@email.pl">Napisz e-mail</a>
+        </div>
+
+        <div class="minirow" style="margin-top:14px;">
+          <a class="link" href="#" title="Facebook (uzupełnij link)">Facebook</a>
+          <a class="link" href="#" title="Instagram (uzupełnij link)">Instagram</a>
+        </div>
+      </aside>
+    </section>
+
+    <footer>
+      <div>© <span id="year"></span> Interaktywna tablica matematyczna</div>
+      <div class="links">
+        <a class="link" href="klasa4.html">Klasa 4</a>
+        <a class="link" href="#" onclick="document.getElementById('openLogin').click();return false;">Logowanie</a>
+        <a class="link" href="mailto:twoj@email.pl">Kontakt</a>
+      </div>
+    </footer>
+  </div>
+
+  <div class="modal-backdrop" id="modal">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
+      <h3 id="loginTitle">Logowanie</h3>
+      <p>To miejsce na przyszłe logowanie (makieta).</p>
+
+      <div class="field">
+        <label for="login">Login</label>
+        <input id="login" type="text" placeholder="np. uczen01" />
+      </div>
+      <div class="field">
+        <label for="pass">Hasło</label>
+        <input id="pass" type="password" placeholder="••••••••" />
+      </div>
+
+      <div class="row">
+        <button class="btn" id="closeLogin">Zamknij</button>
+        <button class="btn primary" onclick="alert('Makieta: tu podepniemy prawdziwe logowanie.');">Zaloguj</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById("year").textContent = new Date().getFullYear();
+
+    const modal = document.getElementById("modal");
+    document.getElementById("openLogin").addEventListener("click", () => {
+      modal.style.display = "flex";
+      setTimeout(() => document.getElementById("login").focus(), 50);
+    });
+    document.getElementById("closeLogin").addEventListener("click", () => modal.style.display = "none");
+    modal.addEventListener("click", (e) => { if(e.target === modal) modal.style.display = "none"; });
+    document.addEventListener("keydown", (e) => { if(e.key === "Escape") modal.style.display = "none"; });
+  </script>
+</body>
+</html>
