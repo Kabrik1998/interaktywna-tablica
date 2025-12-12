@@ -1,10 +1,10 @@
-
 <!DOCTYPE html>
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Interaktywna tablica matematyczna</title>
+
   <style>
     :root{
       --bg: #f6f0e8;
@@ -17,6 +17,7 @@
       --accent2:#7c3aed;
       --radius: 18px;
     }
+
     *{ box-sizing:border-box; font-family: system-ui, -apple-system, Segoe UI, Roboto, "Trebuchet MS", sans-serif; }
     body{
       margin:0;
@@ -39,7 +40,7 @@
       z-index: 0;
     }
 
-    .wrap{ max-width: 1100px; margin: 0 auto; padding: 18px 16px 40px; position:relative; z-index:1; }
+    .wrap{ max-width: 1120px; margin: 0 auto; padding: 18px 16px 40px; position:relative; z-index:1; }
 
     header{
       display:flex; align-items:center; justify-content:space-between; gap:16px;
@@ -52,54 +53,57 @@
       position: sticky;
       top: 10px;
       z-index: 20;
+      flex-wrap: wrap;
     }
-    .brand{
-      display:flex; gap:12px; align-items:center;
-      min-width: 240px;
-    }
-    .logo{
-      width: 46px; height: 46px; border-radius: 16px;
-      background: linear-gradient(135deg, var(--accent), rgba(124,58,237,.85));
-      display:grid; place-items:center;
-      box-shadow: 0 12px 28px rgba(59,130,246,.22);
-      border: 1px solid rgba(255,255,255,.35);
-    }
-    .logo svg{ width: 30px; height: 30px; }
 
-    .brand h1{ font-size: 1.05rem; margin:0; line-height:1.2; }
-    .brand p{ margin:0; font-size:.85rem; color:var(--muted); }
+    .brand{ display:flex; gap:12px; align-items:center; min-width: 240px; }
+
+    .logo{
+      width: 58px; height: 58px;
+      border-radius: 18px;
+      overflow:hidden;
+      border: 1px solid rgba(255,255,255,.60);
+      box-shadow: 0 12px 28px rgba(31,41,55,.12);
+      background: rgba(255,255,255,.55);
+      flex: 0 0 auto;
+    }
+    .logo img{ width:100%; height:100%; object-fit:cover; display:block; }
+
+    .brand h1{
+      font-size: clamp(1.18rem, 2.1vw, 1.62rem);
+      margin:0;
+      line-height:1.12;
+      letter-spacing: -0.02em;
+      font-weight: 950;
+    }
+    .brand p{
+      margin:3px 0 0;
+      font-size: clamp(.98rem, 1.4vw, 1.08rem);
+      color: rgba(31,41,55,.74);
+      font-weight: 800;
+    }
 
     .actions{ display:flex; gap:10px; align-items:center; flex-wrap:wrap; justify-content:flex-end; }
     .btn{
       border: 1px solid var(--border);
       background: var(--panel);
-      padding: 10px 12px;
+      padding: 10px 14px;
       border-radius: 999px;
       cursor:pointer;
       box-shadow: 0 10px 22px rgba(31,41,55,.10);
-      font-weight: 650;
+      font-weight: 750;
       font-size: .95rem;
+      white-space: nowrap;
     }
     .btn.primary{
       background: linear-gradient(135deg, var(--accent), #60a5fa);
       color: #fff;
       border-color: rgba(59,130,246,.35);
     }
-
-    .hero{
-      margin-top: 18px;
-      display:grid;
-      grid-template-columns: 1.4fr .6fr;
-      gap: 16px;
-      align-items: start;
-    }
-    @media (max-width: 860px){
-      .hero{ grid-template-columns: 1fr; }
-      header{ position: static; }
-      .brand{ min-width: 0; }
-    }
+    .btn.ghost{ background: rgba(255,250,242,.75); }
 
     .card{
+      margin-top: 16px;
       background: rgba(255,250,242,.86);
       border: 1px solid var(--border);
       border-radius: var(--radius);
@@ -110,36 +114,30 @@
     }
 
     .headline{
-      margin: 0 0 8px;
-      font-size: clamp(1.35rem, 2.2vw, 1.9rem);
-      letter-spacing: -0.02em;
-    }
-    .sub{
-      margin: 0;
-      color: var(--muted);
-      line-height: 1.45;
-      font-size: 1rem;
+      margin: 0 0 12px;
+      font-size: clamp(1.05rem, 1.55vw, 1.25rem);
+      letter-spacing: -0.01em;
+      font-weight: 850;
+      text-align: left;
     }
 
     .tiles{
-      margin-top: 16px;
       display:grid;
       grid-template-columns: repeat(4, 1fr);
-      gap: 12px;
+      gap: 16px;
     }
-    @media (max-width: 980px){ .tiles{ grid-template-columns: repeat(3, 1fr); } }
-    @media (max-width: 720px){ .tiles{ grid-template-columns: repeat(2, 1fr); } }
-    @media (max-width: 420px){ .tiles{ grid-template-columns: 1fr; } }
+    @media (max-width: 980px){ .tiles{ grid-template-columns: repeat(2, 1fr); } }
+    @media (max-width: 520px){ .tiles{ grid-template-columns: 1fr; } }
 
     .tile{
       background: rgba(255,250,242,.92);
       border: 1px solid var(--border);
-      border-radius: 16px;
-      padding: 14px 14px;
-      box-shadow: 0 12px 26px rgba(31,41,55,.10);
-      display:flex; flex-direction:column; gap:8px;
-      transition: transform .12s ease, box-shadow .12s ease, border-color .12s ease;
-      min-height: 96px;
+      border-radius: 22px;
+      padding: 28px 24px;
+      box-shadow: 0 14px 34px rgba(31,41,55,.12);
+      display:flex; flex-direction:column; gap:10px;
+      transition: transform .14s ease, box-shadow .14s ease, border-color .14s ease;
+      min-height: 210px;
       position: relative;
       overflow:hidden;
     }
@@ -147,18 +145,39 @@
       content:"";
       position:absolute;
       inset:-2px;
-      background: radial-gradient(220px 120px at 10% 0%, rgba(59,130,246,.18), transparent 60%);
-      opacity:.9;
+      background: radial-gradient(300px 180px at 10% 0%, rgba(59,130,246,.18), transparent 60%);
+      opacity:.95;
       pointer-events:none;
     }
     .tile:hover{
-      transform: translateY(-2px);
-      box-shadow: 0 18px 44px rgba(31,41,55,.14);
-      border-color: rgba(59,130,246,.25);
+      transform: translateY(-4px);
+      box-shadow: 0 28px 66px rgba(31,41,55,.18);
+      border-color: rgba(59,130,246,.35);
     }
-    .tile .t{ font-weight: 850; letter-spacing: .02em; position:relative; z-index:1; }
-    .tile .d{ color: var(--muted); font-size: .9rem; margin-top:auto; position:relative; z-index:1; }
-    .tile .tag{
+
+    .tile-top{
+      display:flex;
+      align-items:flex-start;
+      gap:12px;
+      position:relative;
+      z-index:1;
+    }
+
+    .tile-icon{
+      width: 50px;
+      height: 50px;
+      border-radius: 16px;
+      background: linear-gradient(135deg, rgba(59,130,246,.18), rgba(124,58,237,.18));
+      border: 1px solid rgba(255,255,255,.65);
+      display:grid;
+      place-items:center;
+      box-shadow: 0 10px 22px rgba(31,41,55,.10);
+      flex:0 0 auto;
+      margin-top: 2px;
+    }
+    .tile-icon svg{ width: 32px; height: 32px; }
+
+    .tag{
       width: fit-content;
       padding: 4px 10px;
       border-radius: 999px;
@@ -166,9 +185,31 @@
       border: 1px solid rgba(59,130,246,.18);
       color: rgba(29,78,216,.95);
       font-size: .78rem;
-      font-weight: 800;
-      position:relative; z-index:1;
+      font-weight: 900;
+      position:relative;
+      z-index:1;
+      margin-bottom: 6px;
     }
+
+    .t{
+      font-weight: 950;
+      font-size: 1.12rem;
+      line-height: 1.18;
+      position:relative;
+      z-index:1;
+      overflow-wrap: anywhere;
+      word-break: break-word;
+      hyphens: auto;
+    }
+
+    .d{
+      color: var(--muted);
+      font-size: .98rem;
+      margin-top:auto;
+      position:relative;
+      z-index:1;
+    }
+
     .tile.disabled{
       opacity: .55;
       filter: grayscale(.15);
@@ -176,8 +217,17 @@
     }
     .tile.disabled:hover{ transform:none; }
 
-    .side h3{ margin:0 0 8px; font-size: 1.05rem; }
-    .field{ display:flex; flex-direction:column; gap:6px; margin-top: 10px; }
+    .contact-grid{
+      display:grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-top: 10px;
+    }
+    @media (max-width: 720px){
+      .contact-grid{ grid-template-columns: 1fr; }
+    }
+
+    .field{ display:flex; flex-direction:column; gap:6px; }
     label{ font-size:.85rem; color: var(--muted); }
     input{
       border: 1px solid var(--border);
@@ -195,17 +245,10 @@
 
     footer{
       margin-top: 18px;
-      display:flex; justify-content:space-between; gap:12px; flex-wrap:wrap;
+      text-align:center;
       color: rgba(31,41,55,.70);
       font-size: .9rem;
       padding: 0 6px;
-    }
-    .links{ display:flex; gap:10px; flex-wrap:wrap; }
-    .link{
-      border: 1px solid var(--border);
-      background: rgba(255,250,242,.9);
-      padding: 7px 10px;
-      border-radius: 999px;
     }
 
     .modal-backdrop{
@@ -217,7 +260,7 @@
       z-index: 50;
     }
     .modal{
-      width: min(520px, 100%);
+      width: min(560px, 100%);
       background: var(--panel);
       border: 1px solid rgba(255,255,255,.25);
       border-radius: 18px;
@@ -225,10 +268,11 @@
       padding: 16px;
     }
     .modal h3{ margin: 0 0 6px; }
-    .modal p{ margin: 0 0 12px; color: var(--muted); }
+    .modal p{ margin: 0 0 12px; color: var(--muted); line-height:1.45; }
     .modal .row{ display:flex; gap:10px; justify-content:flex-end; margin-top: 12px; }
   </style>
 </head>
+
 <body>
   <div class="math-motif" aria-hidden="true"></div>
 
@@ -236,78 +280,160 @@
     <header>
       <div class="brand">
         <div class="logo" aria-hidden="true">
-          <svg viewBox="0 0 64 64" fill="none">
-            <path d="M14 26L32 16L50 26L32 36L14 26Z" fill="rgba(255,255,255,.92)"/>
-            <path d="M14 26V44L32 54V36L14 26Z" fill="rgba(255,255,255,.70)"/>
-            <path d="M50 26V44L32 54V36L50 26Z" fill="rgba(255,255,255,.55)"/>
-            <path d="M44 46C44 52 39 56 32 56C25 56 20 52 20 46C20 44 21 42 22 40L32 22L42 40C43 42 44 44 44 46Z" fill="rgba(255,255,255,.30)"/>
-          </svg>
+          <img src="bryly.png" alt="Bryły geometryczne" />
         </div>
         <div>
           <h1>Interaktywna tablica matematyczna</h1>
           <p>Karty pracy online</p>
         </div>
       </div>
+
       <div class="actions">
         <button class="btn" id="openLogin">Zaloguj</button>
-        <a class="btn primary" href="klasa4.html">Klasa 4</a>
+        <button class="btn ghost" id="openTeacher">Panel nauczyciela</button>
+        <button class="btn primary" id="openAbout">O mnie</button>
       </div>
     </header>
 
-    <section class="hero">
-      <div class="card">
-        <h2 class="headline">Wybierz klasę</h2>
-        <p class="sub">
-          Karty pracy otwierają się dopiero po wejściu do wybranej klasy.
-        </p>
+    <section class="card">
+      <h2 class="headline">Wybierz klasę</h2>
 
-        <div class="tiles" aria-label="Kategorie">
-          <a class="tile" href="klasa4.html">
-            <div class="tag">Aktywne</div>
-            <div class="t">Klasa 4</div>
-            <div class="d">Dodawanie pisemne (2 karty)</div>
-          </a>
-
-          <div class="tile disabled" aria-disabled="true">
-            <div class="tag">Wkrótce</div>
-            <div class="t">Klasa 5</div>
-            <div class="d">W przygotowaniu</div>
+      <div class="tiles" aria-label="Kategorie">
+        <a class="tile" href="klasa4.html">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M12 26L32 14L52 26L32 38L12 26Z" fill="#6366f1"/>
+                <path d="M12 26V44L32 56V38L12 26Z" fill="#818cf8"/>
+                <path d="M52 26V44L32 56V38L52 26Z" fill="#a5b4fc"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tag">Aktywne</div>
+              <div class="t">Klasa 4</div>
+            </div>
           </div>
+          <div class="d">Działy + karty pracy</div>
+        </a>
 
-          <div class="tile disabled" aria-disabled="true">
-            <div class="tag">Wkrótce</div>
-            <div class="t">Klasa 6</div>
-            <div class="d">W przygotowaniu</div>
+        <div class="tile disabled" aria-disabled="true">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <circle cx="32" cy="32" r="18" fill="#34d399"/>
+                <circle cx="25" cy="26" r="7" fill="rgba(255,255,255,.45)"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tag">Wkrótce</div>
+              <div class="t">Klasa 5</div>
+            </div>
           </div>
+          <div class="d">W przygotowaniu</div>
+        </div>
 
-          <div class="tile disabled" aria-disabled="true">
-            <div class="tag">Wkrótce</div>
-            <div class="t">Klasa 7</div>
-            <div class="d">W przygotowaniu</div>
+        <div class="tile disabled" aria-disabled="true">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M32 14L52 46H12L32 14Z" fill="#fbbf24"/>
+                <path d="M12 46L32 30L52 46" stroke="rgba(255,255,255,.35)" stroke-width="3" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tag">Wkrótce</div>
+              <div class="t">Klasa 6</div>
+            </div>
           </div>
+          <div class="d">W przygotowaniu</div>
+        </div>
 
-          <div class="tile disabled" aria-disabled="true">
-            <div class="tag">Wkrótce</div>
-            <div class="t">Klasa 8</div>
-            <div class="d">W przygotowaniu</div>
+        <div class="tile disabled" aria-disabled="true">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <ellipse cx="32" cy="18" rx="16" ry="7" fill="#60a5fa"/>
+                <path d="M16 18V44C16 48 23 52 32 52C41 52 48 48 48 44V18" fill="#93c5fd"/>
+                <ellipse cx="32" cy="44" rx="16" ry="7" fill="#60a5fa"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tag">Wkrótce</div>
+              <div class="t">Klasa 7</div>
+            </div>
           </div>
+          <div class="d">W przygotowaniu</div>
+        </div>
 
-          <div class="tile disabled" aria-disabled="true">
-            <div class="tag">Wkrótce</div>
-            <div class="t">Arkusze egzaminacyjne</div>
-            <div class="d">W przygotowaniu</div>
+        <div class="tile disabled" aria-disabled="true">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M32 14L52 46H12L32 14Z" fill="#a78bfa"/>
+                <ellipse cx="32" cy="46" rx="20" ry="7" fill="#c4b5fd"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tag">Wkrótce</div>
+              <div class="t">Klasa 8</div>
+            </div>
           </div>
+          <div class="d">W przygotowaniu</div>
+        </div>
 
-          <div class="tile disabled" aria-disabled="true">
-            <div class="tag">Wkrótce</div>
-            <div class="t">Inne</div>
-            <div class="d">Zagadki i zabawy</div>
+        <div class="tile disabled" aria-disabled="true">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M18 12H38L46 20V52H18V12Z" fill="#22c55e"/>
+                <path d="M38 12V20H46" fill="rgba(255,255,255,.35)"/>
+                <path d="M24 28H40" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/>
+                <path d="M24 36H38" stroke="rgba(255,255,255,.55)" stroke-width="4" stroke-linecap="round"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tag">Wkrótce</div>
+              <div class="t">Arkusze egzaminacyjne</div>
+            </div>
           </div>
+          <div class="d">W przygotowaniu</div>
+        </div>
+
+        <div class="tile disabled" aria-disabled="true">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M18 18H30C30 14 34 14 34 18H46V30C50 30 50 34 46 34V46H34C34 50 30 50 30 46H18V34C14 34 14 30 18 30V18Z" fill="#f97316"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tag">Wkrótce</div>
+              <div class="t">Inne</div>
+            </div>
+          </div>
+          <div class="d">Do uzupełnienia</div>
+        </div>
+
+        <div class="tile disabled" aria-disabled="true">
+          <div class="tile-top">
+            <div class="tile-icon" aria-hidden="true">
+              <svg viewBox="0 0 64 64" fill="none">
+                <path d="M18 18H30C30 14 34 14 34 18H46V30C50 30 50 34 46 34V46H34C34 50 30 50 30 46H18V34C14 34 14 30 18 30V18Z" fill="#f97316"/>
+              </svg>
+            </div>
+            <div>
+              <div class="tag">Wkrótce</div>
+              <div class="t">Inne</div>
+            </div>
+          </div>
+          <div class="d">Do uzupełnienia</div>
         </div>
       </div>
+    </section>
 
-      <aside class="card side">
-        <h3>Kontakt</h3>
+    <section class="card">
+      <h2 class="headline">Kontakt</h2>
+      <div class="contact-grid">
         <div class="field">
           <label for="contact">E-mail</label>
           <input id="contact" type="email" placeholder="twoj@email.pl" />
@@ -316,42 +442,30 @@
           <label for="msg">Wiadomość</label>
           <input id="msg" type="text" placeholder="Napisz w czym mogę pomóc..." />
         </div>
-        <div class="minirow">
-          <button class="btn primary" type="button" onclick="alert('To miejsce na formularz – po wdrożeniu podepniemy wysyłkę.');">Wyślij</button>
-          <a class="btn" href="mailto:twoj@email.pl">Napisz e-mail</a>
-        </div>
-
-        <div class="minirow" style="margin-top:14px;">
-          <a class="link" href="#" title="Facebook (uzupełnij link)">Facebook</a>
-          <a class="link" href="#" title="Instagram (uzupełnij link)">Instagram</a>
-        </div>
-      </aside>
+      </div>
+      <div class="minirow">
+        <button class="btn primary" type="button" onclick="alert('To miejsce na formularz – po wdrożeniu podepniemy wysyłkę.');">Wyślij</button>
+        <a class="btn" href="mailto:twoj@email.pl">Napisz e-mail</a>
+      </div>
     </section>
 
     <footer>
-      <div>© <span id="year"></span> Interaktywna tablica matematyczna</div>
-      <div class="links">
-        <a class="link" href="klasa4.html">Klasa 4</a>
-        <a class="link" href="#" onclick="document.getElementById('openLogin').click();return false;">Logowanie</a>
-        <a class="link" href="mailto:twoj@email.pl">Kontakt</a>
-      </div>
+      © <span id="year"></span> Interaktywna tablica matematyczna
     </footer>
   </div>
 
-  <div class="modal-backdrop" id="modal">
+  <div class="modal-backdrop" id="modalLogin">
     <div class="modal" role="dialog" aria-modal="true" aria-labelledby="loginTitle">
       <h3 id="loginTitle">Logowanie</h3>
       <p>To miejsce na przyszłe logowanie (makieta).</p>
-
       <div class="field">
         <label for="login">Login</label>
         <input id="login" type="text" placeholder="np. uczen01" />
       </div>
-      <div class="field">
+      <div class="field" style="margin-top:10px;">
         <label for="pass">Hasło</label>
         <input id="pass" type="password" placeholder="••••••••" />
       </div>
-
       <div class="row">
         <button class="btn" id="closeLogin">Zamknij</button>
         <button class="btn primary" onclick="alert('Makieta: tu podepniemy prawdziwe logowanie.');">Zaloguj</button>
@@ -359,17 +473,55 @@
     </div>
   </div>
 
+  <div class="modal-backdrop" id="modalAbout">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="aboutTitle">
+      <h3 id="aboutTitle">O mnie</h3>
+      <p>Tu wstawisz krótki opis.</p>
+      <div class="row">
+        <button class="btn primary" id="closeAbout">Zamknij</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="modal-backdrop" id="modalTeacher">
+    <div class="modal" role="dialog" aria-modal="true" aria-labelledby="teacherTitle">
+      <h3 id="teacherTitle">Panel nauczyciela</h3>
+      <p>Tu będzie panel nauczyciela (makieta).</p>
+      <div class="row">
+        <button class="btn primary" id="closeTeacher">Zamknij</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    const modal = document.getElementById("modal");
+    const modalLogin = document.getElementById("modalLogin");
+    const modalAbout = document.getElementById("modalAbout");
+    const modalTeacher = document.getElementById("modalTeacher");
+
     document.getElementById("openLogin").addEventListener("click", () => {
-      modal.style.display = "flex";
+      modalLogin.style.display = "flex";
       setTimeout(() => document.getElementById("login").focus(), 50);
     });
-    document.getElementById("closeLogin").addEventListener("click", () => modal.style.display = "none");
-    modal.addEventListener("click", (e) => { if(e.target === modal) modal.style.display = "none"; });
-    document.addEventListener("keydown", (e) => { if(e.key === "Escape") modal.style.display = "none"; });
+    document.getElementById("closeLogin").addEventListener("click", () => modalLogin.style.display = "none");
+    modalLogin.addEventListener("click", (e) => { if(e.target === modalLogin) modalLogin.style.display = "none"; });
+
+    document.getElementById("openAbout").addEventListener("click", () => { modalAbout.style.display = "flex"; });
+    document.getElementById("closeAbout").addEventListener("click", () => modalAbout.style.display = "none");
+    modalAbout.addEventListener("click", (e) => { if(e.target === modalAbout) modalAbout.style.display = "none"; });
+
+    document.getElementById("openTeacher").addEventListener("click", () => { modalTeacher.style.display = "flex"; });
+    document.getElementById("closeTeacher").addEventListener("click", () => modalTeacher.style.display = "none");
+    modalTeacher.addEventListener("click", (e) => { if(e.target === modalTeacher) modalTeacher.style.display = "none"; });
+
+    document.addEventListener("keydown", (e) => {
+      if(e.key === "Escape"){
+        modalLogin.style.display = "none";
+        modalAbout.style.display = "none";
+        modalTeacher.style.display = "none";
+      }
+    });
   </script>
 </body>
 </html>
