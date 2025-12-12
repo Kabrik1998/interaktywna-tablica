@@ -2,7 +2,7 @@
 <html lang="pl">
 <head>
   <meta charset="UTF-8" />
-  <title>Dodawanie pisemne – karta pracy (trudniejsza)</title>
+  <title>Dodawanie pisemne – trudniejsze (2–4 cyfrowe)</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <style>
     :root{
@@ -23,7 +23,6 @@
       justify-content: center;
     }
 
-    /* ✅ przycisk powrotu na stronę */
     .back-to-site{
       position: fixed;
       left: 14px;
@@ -86,6 +85,7 @@
       width: 95%;
       color: #0f172a;
       page-break-inside: avoid;
+      text-align:center;
     }
 
     .score-badge {
@@ -189,7 +189,6 @@
       background: #ecfdf5 !important;
       box-shadow: 0 0 0 3px rgba(22, 163, 74, 0.16) !important;
     }
-
     .is-wrong {
       border-color: #dc2626 !important;
       background: #fef2f2 !important;
@@ -244,7 +243,7 @@
       }
       .toolbar-bottom { display: none; }
       .score-badge { display: none; }
-      .back-to-site { display: none; } /* ✅ ukryj w druku */
+      .back-to-site { display: none; }
     }
 
     @page { size: A4; margin: 0; }
@@ -252,9 +251,8 @@
 </head>
 
 <body>
-  <!-- ✅ gotowy przycisk powrotu -->
-  <button class="back-to-site" type="button" onclick="location.href='klasa4.html'">
-    ← Wróć na stronę
+  <button class="back-to-site" type="button" onclick="location.href='dzialania-pisemne.html'">
+    ← Wróć do „Działania pisemne”
   </button>
 
   <div class="pages">
@@ -262,10 +260,10 @@
       <div class="score-badge" id="score-badge">Masz 0/12 poprawnie</div>
 
       <h1>Dodawanie pisemne</h1>
-      <p class="subtitle">Karta pracy ucznia</p>
+      <p class="subtitle">Wersja trudniejsza (2–4 cyfrowe)</p>
 
       <div class="info-box">
-        Wykonaj dodawanie pisemne. Wpisz wynik w puste okienka.
+        Wykonaj dodawanie pisemne (wersja trudniejsza). Wpisz wynik w puste okienka.
       </div>
 
       <div class="tasks-grid" id="tasks-grid"></div>
@@ -285,6 +283,11 @@
 
     function randomInt(min, max) {
       return Math.floor(Math.random() * (max - min + 1)) + min;
+    }
+
+    // 2–4 cyfry: 10–9999
+    function random2to4Digits() {
+      return randomInt(10, 9999);
     }
 
     function updateScore(correctCount) {
@@ -338,10 +341,8 @@
         const expectedDigit = idxInSum >= 0 ? sumStr[idxInSum] : "";
 
         input.dataset.taskIndex = String(taskIndex);
-        input.dataset.colIndex = String(i);
         input.dataset.expected = expectedDigit;
 
-        // tylko cyfry + reset licznika po zmianie (bez przeskakiwania kursora)
         input.addEventListener("input", (e) => {
           const el = e.target;
           el.value = el.value.replace(/\D/g, "").slice(0, 1);
@@ -367,7 +368,7 @@
       let allCorrect = true;
 
       inputs.forEach((inp) => {
-        const expected = inp.dataset.expected; // '' albo cyfra
+        const expected = inp.dataset.expected;
         const value = (inp.value || "").trim();
         const isCorrect = expected === "" ? value === "" : value === expected;
 
@@ -392,24 +393,18 @@
       const tasksGrid = document.getElementById("tasks-grid");
       tasksGrid.innerHTML = "";
 
-      for (let i = 1; i <= NUMBER_OF_TASKS; i++) {
-        const digits = Math.random() < 0.6 ? 3 : 4;
-        const min = 10 ** (digits - 1);
-        const max = 10 ** digits - 1;
+      for (let idx = 0; idx < NUMBER_OF_TASKS; idx++) {
+        const index = idx + 1;
 
-        const a = randomInt(min, max);
+        // trudniejsze: dwie liczby 2–4 cyfry
+        let a = random2to4Digits();
+        let b = random2to4Digits();
 
-        const bDigits = Math.random() < 0.4 ? digits - 1 : digits;
-        const minB = 10 ** (bDigits - 1);
-        const maxB = 10 ** bDigits - 1;
-
-        const b = randomInt(minB, maxB);
         const sum = a + b;
 
         const aStr = String(a);
         const bStr = String(b);
         const sumStr = String(sum);
-
         const totalCols = Math.max(aStr.length, bStr.length, sumStr.length);
 
         const card = document.createElement("div");
@@ -417,7 +412,7 @@
 
         const title = document.createElement("div");
         title.className = "task-title";
-        title.textContent = i + ")";
+        title.textContent = index + ")";
         card.appendChild(title);
 
         const inner = document.createElement("div");
@@ -428,7 +423,7 @@
 
         expr.appendChild(createDigitRow(aStr, totalCols, ""));
         expr.appendChild(createDigitRow(bStr, totalCols, "+"));
-        expr.appendChild(createAnswerRowInputs(totalCols, i, sumStr));
+        expr.appendChild(createAnswerRowInputs(totalCols, index, sumStr));
 
         inner.appendChild(expr);
         card.appendChild(inner);
